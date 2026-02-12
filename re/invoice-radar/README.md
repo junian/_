@@ -62,8 +62,22 @@ By the pattern of it, it's using the distributed database called [Jazz][jazz-too
 
 Let's try accessing the Jazz DB by using the [Jazz Inspector][jazz-inspector].
 Use the `syncServer`, `accountID`, and `accountSecret` to login.
+Use the key from `Swt.load` to get the CoValue.
 
+Got this value.
+Based on `getSharedSecret`, it's using the value of `latestBuildHash` property.
 
+<!-- uncensored
+```bash
+latestBuildHash
+3e03c49d674d226b3057f360fa9dbd296fbce0177ace1703f9ecf5f2594aaab2
+```
+-->
+
+```bash
+latestBuildHash
+3e03***********
+```
 
 [jazz-tools]: https://jazz.tools/
 [jazz-inspector]: https://inspector.jazz.tools/
