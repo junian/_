@@ -6,7 +6,14 @@ npx asar extract "/Applications/Invoice Radar.app/Contents/Resources/app.asar" ~
 
 Need to decrypt following:
 
+<!-- 
+```
+https://invoiceradar.com/plugins.json?v=2&c=1
+```
+-->
+
 ```bash
+https://****.com/plugins.json?v=2&c=1
 ```
 
 Find `authTag`.
@@ -17,6 +24,28 @@ Found out possibly decryption function:
 IVr(r.encrypted,r.iv,r.authTag,A)
 ```
 
+Let's find find out the `IVr` function, found this one:
+
+```bash
+const mVr="aes-256-gcm";function IVr(e,t,n,r){const i=wl.createDecipheriv(mVr,Buffer.from(r,"hex"),Buffer.from(t,"base64"));i.setAuthTag(Buffer.from(n,"base64"));const s=Buffer.concat([i.update(Buffer.from(e,"base64")),i.final()]);return JSON.parse(s.toString("utf8"))}
+```
+
+Let's beautify it:
+
+```javascript
+const mVr = "aes-256-gcm";
+function IVr(e, t, n, r) { 
+    const i = wl.createDecipheriv(mVr, Buffer.from(r, "hex"), Buffer.from(t, "base64")); 
+    i.setAuthTag(Buffer.from(n, "base64")); 
+    const s = Buffer.concat([i.update(Buffer.from(e, "base64")), i.final()]); 
+    return JSON.parse(s.toString("utf8")) 
+}
+```
+
+From the look of it, it seems like a standard `aes-256-gcm` encryption.
+We can reconstruct it using the standard Node.js `crypto` package.
+
+Now let's go back to `IVr` execution. Take a look at the parameters.
 We already have the `encrypted`, `iv`, and `authTag` from the JSON API above.
 But what about `A`?
 Seems like `A` is the key to decrypt, search for it and got from:
