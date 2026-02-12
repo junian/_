@@ -108,5 +108,95 @@ latestBuildHash
 3e03***********
 ```
 
+Now let's build the CLI:
+
+```javascript
+#!/usr/bin/env node
+
+import { createDecipheriv } from 'crypto';
+import { get } from 'https';
+
+// Jazz configuration
+const TARGET_ID = 'co_zmPyjq18WXXURamZmtPoSgjFP9D';
+
+// Encrypted data URL
+const ENCRYPTED_DATA_URL = 'https://****.com/plugins.json?v=2&c=1';
+
+// Cipher configuration
+const CIPHER_ALGORITHM = 'aes-256-gcm';
+
+function decrypt(encrypted, iv, authTag, key) {
+  const decipher = createDecipheriv(
+    CIPHER_ALGORITHM,
+    Buffer.from(key, 'hex'),
+    Buffer.from(iv, 'base64')
+  );
+  decipher.setAuthTag(Buffer.from(authTag, 'base64'));
+  const decrypted = Buffer.concat([
+    decipher.update(Buffer.from(encrypted, 'base64')),
+    decipher.final()
+  ]);
+  return JSON.parse(decrypted.toString('utf8'));
+}
+
+function fetchEncryptedData() {
+  return new Promise((resolve, reject) => {
+    get(ENCRYPTED_DATA_URL, (res) => {
+      let data = '';
+      
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      
+      res.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          resolve(parsed);
+        } catch (error) {
+          reject(new Error(`Failed to parse JSON from URL: ${error.message}`));
+        }
+      });
+    }).on('error', (error) => {
+      reject(new Error(`Failed to fetch encrypted data: ${error.message}`));
+    });
+  });
+}
+
+async function main() {
+  try {
+    // Step 1: Get encryption key from Jazz
+    const encryptionKey = '3e03***********'
+    
+    // Step 2: Fetch encrypted data from URL
+    const encryptedData = await fetchEncryptedData();
+    
+    // Step 3: Validate encrypted data structure
+    if (!encryptedData.encrypted || !encryptedData.iv || !encryptedData.authTag) {
+      throw new Error('Invalid encrypted data structure: missing encrypted, iv, or authTag fields');
+    }
+    
+    // Step 4: Decrypt the data
+    const decrypted = decrypt(
+      encryptedData.encrypted,
+      encryptedData.iv,
+      encryptedData.authTag,
+      encryptionKey
+    );
+    
+    // Output the decrypted data
+    console.log(JSON.stringify(decrypted, null, 2));
+    
+  } catch (error) {
+    console.error('\n✗ Error:', error.message);
+    process.exit(1);
+  }
+}
+
+main();
+```
+
+And that's it.
+We can extract the encrypted json whenever we want.
+
 [jazz-tools]: https://jazz.tools/
 [jazz-inspector]: https://inspector.jazz.tools/
