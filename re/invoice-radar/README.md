@@ -13,11 +13,22 @@ https://invoiceradar.com/plugins.json?v=2&c=1
 -->
 
 ```bash
-https://****.com/plugins.json?v=2&c=1
+curl https://****.com/plugins.json?v=2&c=1
 ```
 
-Find `authTag`.
+Example response look like this:
 
+```json
+{
+    "encrypted": "xNKCjOwa.....",
+    "iv": "Uh02oMhEvGXeovH5Yfq0tQ==",
+    "authTag": "S3h3IQJ0oG9f0DYpLlpR3w=="
+}
+```
+
+The `encrypted` property suppose to be a JSON text, but encrypted by the app.
+
+The key `authTag` seems unique, let's try to search for it inside the source code.
 Found out possibly decryption function:
 
 ```javascript
