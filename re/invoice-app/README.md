@@ -1,7 +1,7 @@
-# Invoice Radar
+# Invoice App
 
 ```bash
-npx asar extract "/Applications/Invoice Radar.app/Contents/Resources/app.asar" ~/Documents/invoice-radar-re/
+npx asar extract "/Applications/Invoice App.app/Contents/Resources/app.asar" ~/Documents/invoice-app-re/
 ```
 
 Need to decrypt following:
