@@ -209,5 +209,10 @@ main();
 And that's it.
 We can extract the encrypted json whenever we want.
 
+---
+
+Looking to do something similar?
+Let's discuss on [Upwork](https://www.junian.dev/upwork/).
+
 [jazz-tools]: https://jazz.tools/
 [jazz-inspector]: https://inspector.jazz.tools/
