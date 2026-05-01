@@ -21,9 +21,7 @@ My client needed to find the hidden API within the HipPOS desktop app to use for
 
 First, I detected if the binaries were protected by an obfuscator.
 
-<!--
 ![Deobfuscate](./img/step-01-de4dot-deobfuscate.gif)
--->
 
 Using de4dot, I identified that the binaries were protected by .NET Reactor. I then cleaned the binaries.
 
@@ -54,9 +52,7 @@ Saving C:\HipPOS-clean\HipPOS.exe
 
 Next, I copied all `dll` libraries from `C:\HipPOS\` to `C:\HipPOS-clean\`, ensuring not to replace the deobfuscated binaries.
 
-<!--
 ![Copy Dependencies](./img/step-02-1-copy-dependencies.gif)
--->
 
 I opened ILSpy, selected the necessary files, and saved the source code.
 
@@ -66,15 +62,11 @@ I opened ILSpy, selected the necessary files, and saved the source code.
 - HipPOS-Updater.exe
 - HipPOS.exe
 
-<!--
 ![ILSpy Select Files](./img/step-02-2-ilspy-select-files.gif)
--->
 
 For each binary, I right-clicked and selected **Save Code**.
 
-<!--
 ![ILSpy Save Source Code](./img/step-02-3-ilspy-save-source-code.gif)
--->
 
 I saved the code to `C:\HipPOS-src\`.
 
@@ -90,9 +82,7 @@ I built a simple desktop app to verify if I used the correct functions.
 
 It was a basic GUI with functions copied from the decompiled code from Steps 2 and 3.
 
-<!--
 ![Tools for HipPOS Screenshot](./img/tools-for-hippos-screenshot.png)
--->
 
 ## Step 5: Write Python Script for Web App Integration with HipPOS REST API
 
